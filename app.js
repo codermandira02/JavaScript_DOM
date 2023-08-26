@@ -97,24 +97,100 @@
 //------------------ EVENTS -----------------
 
 //------------ EventListner ----------
-const btns = document.querySelectorAll('#book-list .delete');
+// const btns = document.querySelectorAll('#book-list .delete');
 
-Array.from(btns).forEach(function(btn){ //converting btns collection to array
+// Array.from(btns).forEach(function(btn){ //converting btns collection to array
 
-    btn.addEventListener('click', function(e){ //adding eventlistner metthod to btn; 1st parameter is and event here click and 2nd is a callbck function of that event
+//     btn.addEventListener('click', function(e){ //adding eventlistner metthod to btn; 1st parameter is and event here click and 2nd is a callbck function of that event; here we adding event to every button
 
-        const li = e.target.parentElement; //grabbing parent elemet of the child node li
-        li.parentNode.removeChild(li) //deleting child node li by grabbing parent node of it
+//         const li = e.target.parentElement; //grabbing parent elemet of the child node li
+//         li.parentNode.removeChild(li) //deleting child node li by grabbing parent node of it
 
-    })
-})
+//     })
+// })
 
 
 //------------------------ PREVENTING EVENTS ------------
 
-const link = document.querySelector('#page-banner a');
+// const link = document.querySelector('#page-banner a');
 
-link.addEventListener('click', function(e){
-    e.preventDefault(); //preventing the link to forwarding to the webpage
-    console.log('navigation to', e.target.textContent, 'was prevented');
+// link.addEventListener('click', function(e){
+//     e.preventDefault(); //preventing the link to forwarding to the webpage
+//     console.log('navigation to', e.target.textContent, 'was prevented');
+// })
+
+//----------------- EVEN BUBBLING -------------
+// ------------delete books ----------
+const list = document.querySelector('#book-list ul');
+
+list.addEventListener('click', function(e){ //deleting every child node associating with parent node ul
+    if(e.target.className == 'delete'){
+        const li = e.target.parentElement;
+        list.removeChild(li); // here we write list as it is same with li.parentNode that is ul that we had already mention in const line
+    }
+    
+})
+
+
+//---------- INTERACTING WITH FORMS ------------
+//---------- ADD BOOK ---------
+const addForm = document.forms['add-book']; // grabbing the elements of form node
+
+addForm.addEventListener('submit', function(e){
+    e.preventDefault(); // preventing the page freload
+    const value = addForm.querySelector('input[type="text"]').value; //grabbing the value of form into value variable which input value is text typed
+    //console.log(value) //showing the added value in console
+
+
+    //---------------------- CREATING ELEMENTS THEN PUSH IT TO THE DOM ------------------
+    //-------- Create Elements---------
+    const li = document.createElement('li');
+    const bookName = document.createElement('span');
+    const deleteBtn = document.createElement('span');
+
+    //add content to the element
+    deleteBtn.textContent ='delete';
+    bookName.textContent = value;
+
+    //add classes
+    bookName.classList.add('name');
+    deleteBtn.classList.add('delete');
+
+    //append to document
+    li.appendChild(bookName); //adding child of the li tag 
+    li.appendChild(deleteBtn);
+    list.appendChild(li);
+})
+
+
+//------- hide books ----
+const hideBox = document.querySelector('#hide');
+
+hideBox.addEventListener('change', function(e){
+
+    if(hideBox.checked){
+        list.style.display = "none";
+    } else{
+        list.style.display = "initial";
+    }
+});
+
+// ------------------ Changing styles of class using JAvaScript-----------
+
+//filter books
+const searchBar = document.forms["search-books"].querySelector('input');
+console.log("searchBar", searchBar)
+searchBar.addEventListener('keyup', function(e){
+    const term = e.target.value.toLowerCase();
+    const books = list.getElementsByTagName('li');
+
+    Array.from(books).forEach(function(book){
+        const title = book.firstElementChild.textContent;
+
+        if(title.toLowerCase().indexOf(term) != -1){
+            book.style.display = 'block';
+        } else{
+            book.style.display = 'none';
+        }
+    })
 })

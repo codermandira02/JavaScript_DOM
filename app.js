@@ -179,7 +179,7 @@ hideBox.addEventListener('change', function(e){
 
 //filter books
 const searchBar = document.forms["search-books"].querySelector('input');
-console.log("searchBar", searchBar)
+
 searchBar.addEventListener('keyup', function(e){
     const term = e.target.value.toLowerCase();
     const books = list.getElementsByTagName('li');
